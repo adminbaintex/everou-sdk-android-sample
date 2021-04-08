@@ -461,7 +461,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><a href="#accionar">Accionar dispositivo</a></p>
 </li>
 <li>
-<p><a href="#widget">Añadir Widget</a></p>
+<p><a href="#widget">Añadir Widget</a>
+&#8203;<br></p>
 </li>
 </ul>
 </div>
@@ -493,6 +494,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 }</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>Incluye las siguientes dependencias en el fichero <strong><em>build.gradle</em></strong> a nivel de aplicación:</p>
@@ -506,9 +510,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 }</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
-<p>Ejecuta <strong>Gradle Sync</strong></p>
+<p>Ejecuta <strong>Gradle Sync</strong>
+&#8203;<br></p>
 </li>
 </ul>
 </div>
@@ -525,6 +533,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre>    EverouManager everouManager = EverouManager.getInstance(context);
     user = everouManager.init(apiKey);</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 <div class="paragraph">
 <p><code>Excepciones</code></p>
@@ -551,6 +562,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -563,6 +577,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre>    ArrayList&lt;Device&gt; devices = everouManager.getDevices();</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 <div class="paragraph">
 <p><code>Excepciones</code></p>
@@ -593,6 +610,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -606,6 +626,9 @@ Para poder accionar un dispositivo se necesita que esté activado el Bluetooth d
 <div class="content">
 <pre>    everouManager.enableDevice(device);</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 <div class="paragraph">
 <p><code>Excepciones</code></p>
@@ -651,6 +674,9 @@ Para poder accionar un dispositivo se necesita que esté activado el Bluetooth d
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -690,6 +716,9 @@ Para poder accionar un dispositivo se necesita que esté activado el Bluetooth d
     }</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -699,7 +728,7 @@ Para poder accionar un dispositivo se necesita que esté activado el Bluetooth d
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>    Intent intent = new Intent(context, this.getClass());
+<pre>    Intent intent = new Intent(context, WidgetActionReceiver.class);
     intent.setAction(ACTION_ENABLE_DEVICE);
     intent.putExtra(EXTRA_DEVICE, device);
     intent.putExtra(EXTRA_APP_WIDGET_ID, appWidgetId);
@@ -711,6 +740,9 @@ Para poder accionar un dispositivo se necesita que esté activado el Bluetooth d
 
     appWidgetManager.updateAppWidget(appWidgetId, views);</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -738,12 +770,15 @@ Para poder accionar un dispositivo se necesita que esté activado el Bluetooth d
     }</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-04-08 12:44:05 +0200
+Last updated 2021-04-08 14:28:26 +0200
 </div>
 </div>
 </body>

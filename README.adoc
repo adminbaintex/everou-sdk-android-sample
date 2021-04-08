@@ -7,6 +7,7 @@
 * <<obtener, Obtener dispostivos>>
 * <<accionar, Accionar dispositivo>>
 * <<widget, Añadir Widget>>
+{zwsp} +
 
 [[configuracion]]
 == Configuración
@@ -27,6 +28,7 @@ allprojects {
     }
 }
 ----
+{zwsp} +
 
 * Incluye las siguientes dependencias en el fichero *_build.gradle_* a nivel de aplicación:
 +
@@ -38,8 +40,11 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.1'
 }
 ----
+{zwsp} +
+
 
 * Ejecuta *Gradle Sync*
+{zwsp} +
 
 [[inicializacion]]
 == Inicialización
@@ -50,6 +55,7 @@ Después de autentificar al usuario de la app con su sistema y haber obtenido un
     EverouManager everouManager = EverouManager.getInstance(context);
     user = everouManager.init(apiKey);
 ----
+{zwsp} +
 
 `Excepciones`
 
@@ -62,6 +68,7 @@ Después de autentificar al usuario de la app con su sistema y haber obtenido un
 |InitializationErrorException
 |No hay conexión a internet o se ha producido algún otro error.
 |===
+{zwsp} +
 
 [[obtener]]
 == Obtener dispositivos
@@ -71,6 +78,7 @@ Para obtener los dispositivos de un usuario se debe llamar a la función *_getDe
 ----
     ArrayList<Device> devices = everouManager.getDevices();
 ----
+{zwsp} +
 
 `Excepciones`
 
@@ -88,6 +96,8 @@ Para obtener los dispositivos de un usuario se debe llamar a la función *_getDe
 
 |===
 
+{zwsp} +
+
 [[accionar]]
 == Accionar dispositivo
 
@@ -97,6 +107,7 @@ Para poder accionar un dispositivo se necesita que esté activado el Bluetooth d
 ----
     everouManager.enableDevice(device);
 ----
+{zwsp} +
 
 `Excepciones`
 
@@ -117,6 +128,8 @@ a|
 * Se ha alcanzado el límite de conexiones permitidas
 
 |===
+
+{zwsp} +
 
 [[widget]]
 == Añadir Widget
@@ -148,6 +161,7 @@ a|
     }
 
 ----
+{zwsp} +
 
 * Implementa un `receiver` que recibirá los eventos del Widget para ejecutar la acción sobre el dispositivo cuando se reciba un evento
 
@@ -164,6 +178,7 @@ a|
 
     appWidgetManager.updateAppWidget(appWidgetId, views);
 ----
+{zwsp} +
 
 ----
     @Override
@@ -189,3 +204,4 @@ a|
         }
     }
 ----
+{zwsp} +
