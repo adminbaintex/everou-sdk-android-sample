@@ -1,0 +1,191 @@
+= Cómo empezar con la librería Android
+
+`Tabla de contenido`
+
+* <<configuracion, Configuración>>
+* <<inicializacion, Inicialización>>
+* <<obtener, Obtener dispostivos>>
+* <<accionar, Accionar dispositivo>>
+* <<widget, Añadir Widget>>
+
+[[configuracion]]
+== Configuración
+
+Para añadir la librería Everou a un proyecto de Android necesitas el fichero *_everoulibrary.aar_*
+
+* Añade el fichero *_everoulibrary-<version>.aar_* en el directorio *<project_dir>/<application_folder>/libs*
+* En el fichero *_build.gradle_* a nivel de proyecto incluye el directorio _libs_ en los repositorios:
++
+----
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+----
+
+* Incluye las siguientes dependencias en el fichero *_build.gradle_* a nivel de aplicación:
++
+----
+dependencies {
+...
+    implementation(name:'everoulibrary-<version>', ext:'aar')
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    implementation 'com.android.volley:volley:1.1.1'
+}
+----
+
+* Ejecuta *Gradle Sync*
+
+[[inicializacion]]
+== Inicialización
+
+Después de autentificar al usuario de la app con su sistema y haber obtenido una *_api_key_* de Everou, la app debe inicializar *_EverouManager_* con dicha api_key:
+
+----
+    EverouManager everouManager = EverouManager.getInstance(context);
+    user = everouManager.init(apiKey);
+----
+
+`Excepciones`
+
+|===
+|Excepción |Descripción
+
+|InvalidAPIKeyException
+|La api_key introducida es errónea o no se corresponde con ningún usuario.
+
+|InitializationErrorException
+|No hay conexión a internet o se ha producido algún otro error.
+|===
+
+[[obtener]]
+== Obtener dispositivos
+
+Para obtener los dispositivos de un usuario se debe llamar a la función *_getDevices_*:
+
+----
+    ArrayList<Device> devices = everouManager.getDevices();
+----
+
+`Excepciones`
+
+|===
+|Excepción |Descripción
+
+|InitializationErrorException
+|No se ha inicializado correctamente el manager con una api_key válida.
+
+|InvalidAPIKeyException
+|La api_key con la que se inicializó el manager ha dejado de ser válida.
+
+|ObtainingDevicesErrorException
+|No hay conexión a internet o se ha producido un error obteniendo los dispositivos.
+
+|===
+
+[[accionar]]
+== Accionar dispositivo
+
+Puedes accionar cualquiera de los dispositivos del usuario con la función *_enableDevice_*.
+Para poder accionar un dispositivo se necesita que esté activado el Bluetooth del teléfono y que se encuentre en el rango de conexión con el dispositivo.
+
+----
+    everouManager.enableDevice(device);
+----
+
+`Excepciones`
+
+|===
+|Excepción |Descripción
+
+|InitializationErrorException
+|No se ha inicializado correctamente el manager con una api_key válida.
+
+|GenerateBluetoothKeyException
+|No se ha podido generar una clave bluetooth válida en el dispositivo. El usuario no tiene acceso al dispositivo o no hay conexión a internet.
+
+|FailedEnablingDeviceException
+a|
+* El usuario no tiene acceso al dispositivo
+* El dispositivo no se encuentra dentro del alcance o está desconectado
+* Bluetooth no está activo
+* Se ha alcanzado el límite de conexiones permitidas
+
+|===
+
+[[widget]]
+== Añadir Widget
+
+* Implementa un nuevo widget para tu app siguiendo la guía de la documentación oficial de https://developer.android.com/guide/topics/appwidgets?hl=es-419[Android].
+
+* Modifica el método `onUpdate()` de la clase *_AppWidgetProvider_*
+
+----
+    public class ExampleAppWidgetProvider extends AppWidgetProvider {
+
+        public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+            for (int appWidgetId : appWidgetIds) {
+            String deviceUid = getWidgetFromSharedPreferences(context, appWidgetId);
+            if (deviceUid == null)
+                continue;
+
+            Intent intent = new Intent(context, this.getClass());
+            intent.setAction(ACTION_ENABLE_DEVICE);
+            intent.putExtra(EXTRA_DEVICE_UID, deviceUid);
+            intent.putExtra(EXTRA_APP_WIDGET_ID, appWidgetId);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.example_appwidget);
+            views.setOnClickPendingIntent(R.id.button, pendingIntent);
+
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+        }
+    }
+
+----
+
+* Implementa un `receiver` que recibirá los eventos del Widget para ejecutar la acción sobre el dispositivo cuando se reciba un evento
+
+----
+    Intent intent = new Intent(context, WidgetActionReceiver.class);
+    intent.setAction(ACTION_ENABLE_DEVICE);
+    intent.putExtra(EXTRA_DEVICE, device);
+    intent.putExtra(EXTRA_APP_WIDGET_ID, appWidgetId);
+    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+    RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.example_appwidget);
+    views.setTextViewText(R.id.textViewName, device.desc);
+    views.setOnClickPendingIntent(R.id.button, pendingIntent);
+
+    appWidgetManager.updateAppWidget(appWidgetId, views);
+----
+
+----
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (ACTION_ENABLE_DEVICE.equals(intent.getAction())) {
+            Device device = intent.getParcelableExtra(EXTRA_DEVICE);
+            if (device != null)
+                new Thread(() -> sendDeviceAction(context, device)).start();
+            return;
+        }
+
+        super.onReceive(context, intent);
+    }
+
+    private void sendDeviceAction(Context context, Device device) {
+        try {
+            EverouManager everouManager = EverouManager.getInstance(context);
+            everouManager.enableDevice(device);
+
+        } catch (InitializationErrorException | GenerateBluetoothKeyException | FailedEnablingDeviceException e) {
+            e.printStackTrace();
+            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context, R.string.error_sending_device_action, Toast.LENGTH_SHORT).show());
+        }
+    }
+----
