@@ -2,11 +2,22 @@
 
 `Tabla de contenido`
 
+* <<compilar, Compilar app Everou Sample>>
 * <<configuracion, Configuración>>
 * <<inicializacion, Inicialización>>
 * <<obtener, Obtener dispostivos>>
 * <<accionar, Accionar dispositivo>>
 * <<widget, Añadir Widget>>
+
+{zwsp} +
+[[compilar]]
+== Compilar app Everou Sample
+
+Para compilar la aplicación de ejemplo de Everou SDK es necesario especificar una api key válida en el fichero *_Constants.java_*
+----
+public static final String API_KEY = "REPLACE_API_KEY"; // Reemplazar por una api key válida para un usuario de Everou
+----
+
 
 {zwsp} +
 
