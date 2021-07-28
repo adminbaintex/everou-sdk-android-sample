@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +65,7 @@ public class MainFragment extends Fragment {
                 try {
                     ArrayList<Device> devices = mViewModel.getUserDevices();
                     new Handler(Looper.getMainLooper()).post(() -> mAdapter.setDevices(devices));
+
                 } catch (ObtainingDevicesErrorException e) {
                     e.printStackTrace();
                 }
@@ -80,4 +80,11 @@ public class MainFragment extends Fragment {
         }).start();
     }
 
+    public void enableAutoMode() {
+        new Thread(() -> mViewModel.startAutoMode(getContext())).start();
+    }
+
+    public void disableAutoMode() {
+        new Thread(() -> mViewModel.stopAutoMode()).start();
+    }
 }

@@ -23,4 +23,9 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.baintex.everousample", appContext.getPackageName());
     }
+
+    @Test
+    public void anotherTest() {
+        assertNotEquals(1,1);
+    }
 }

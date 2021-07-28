@@ -3,4 +3,10 @@
     <string name="enable">Enable</string>
     <string name="error_obtaining_devices">There was an error obtaining devices</string>
     <string name="error_sending_device_action">There was an error enabling device</string>
+    <string name="auto_mode_status">Auto mode is %1$s</string>
+    <string name="status_enabled">enabled</string>
+    <string name="status_disabled">disabled</string>
+    <string name="disable">Disable</string>
+    <string name="cancel">Cancel</string>
+    <string name="auto_mode">Auto Mode</string>
 </resources>
