@@ -8,6 +8,7 @@
 * <<obtener, Obtener dispostivos>>
 * <<accionar, Accionar dispositivo>>
 * <<widget, Añadir Widget>>
+* <<auto, Accionar dispostivo por acción automática>>
 
 {zwsp} +
 [[compilar]]
@@ -220,3 +221,34 @@ a|
     }
 ----
 {zwsp} +
+
+[[auto]]
+== Accionar dispositivo por acción automática
+
+*_La versión mínima requerida para el funcionamiento automático es Android Oreo._*
+
+Es necesario solicitar el permiso de localización en segundo plano para poder iniciar el accionamiento automático de los dispositivos.
+
+Los optimizadores de batería pueden detener la aplicación en segundo plano por lo que es recomendable solicitar al usuario que desactive esta optimización para el correcto funcionamiento de la apertura automática.
+
+* Iniciar modo automático:
+----
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        BeaconManagerI beaconManager = BeaconManager.getInstance(context);
+        beaconManager.registerObserver(EverouSampleApp.getInstance());
+        beaconManager.start(user, devices);
+    }
+----
+
+* Detener modo automático:
+
+----
+    if (beaconManager != null)
+        beaconManager.stop();
+----
+{zwsp} +
+
+
+
+
+
