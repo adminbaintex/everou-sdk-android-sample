@@ -235,7 +235,6 @@ Los optimizadores de batería pueden detener la aplicación en segundo plano por
 ----
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
         BeaconManagerI beaconManager = BeaconManager.getInstance(context);
-        beaconManager.registerObserver(EverouSampleApp.getInstance());
         beaconManager.start(user, devices);
     }
 ----
@@ -246,6 +245,87 @@ Los optimizadores de batería pueden detener la aplicación en segundo plano por
     if (beaconManager != null)
         beaconManager.stop();
 ----
+
+* Debemos registrar un observer donde se notificará cuando un dispositivo es detectado y cuando se ha ejecutado una acción:
+
+----
+    BeaconManagerObserver observer = new BeaconManagerObserver() {
+        @Override
+        public void updateStatus(boolean running) {
+
+        }
+
+        @Override
+        public void deviceDetected(String bluetoothId, int rssi) {
+
+        }
+
+        @Override
+        public void error(Device device, String errorMessage) {
+
+        }
+
+        @Override
+        public void triggerActionExecuted(Device device) {
+
+        }
+    };
+
+    beaconManager.registerObserver(observer);
+----
+
+[cols="1*",options="header"]
+|===
+|*updateStatus*
+|_void [blue]#updateStatus(boolean running)#_ +
+ +
+Indica el estado del modo automático. +
+ +
+*Parámetros* +
+_running_ - Si running es *true* el modo automático se encuentra activo.
+|===
+
+[cols="1*",options="header"]
+|===
+|*deviceDetected*
+|_void [blue]#deviceDetected(String bluetoothId, int rssi)#_ +
+ +
+Se ha entrado en el rango bluetooth de un dispositivo. +
+ +
+*Parámetros* +
+_bluetoothId_ - Identificador del dispositivo encontrado. +
+_rssi_ - Potencia de la señal recibida del dispositivo.
+|===
+
+[cols="1*",options="header"]
+|===
+|*error*
+|_void [blue]#error(Device device, String errorMessage)#_ +
+ +
+Se ha producido un error al intentar accionar un dispositivo. +
+ +
+*Parámetros* +
+_device_ - Dispositivo sobre el que se está ejecutando el accionamiento. +
+_errorMessage_ - Descripción del error recibido.
+|===
+
+[cols="1*",options="header"]
+|===
+|*triggerActionExecuted*
+|_void [blue]#triggerActionExecuted(Device device)#_ +
+ +
+El dispositivo ha sido accionado. +
+ +
+*Parámetros* +
+_device_ - Dispositivo que ha sido accionado.
+|===
+
+* Para eliminar el observer:
+
+----
+    beaconManager.unRegisterObserver(observer);
+----
+
 {zwsp} +
 
 
